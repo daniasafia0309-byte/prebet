@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "523367095002",
+    "project_id": "prebetupsi-fe259",
+    "storage_bucket": "prebetupsi-fe259.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:523367095002:android:070e696f653d82937663e3",
+        "android_client_info": {
+          "package_name": "com.example.prebet"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDeMkSHS48L9WtY8EXBn3xo1g3PMAg8x3A"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:523367095002:android:098454d4f4d1630e7663e3",
+        "android_client_info": {
+          "package_name": "com.upsiprebet"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDeMkSHS48L9WtY8EXBn3xo1g3PMAg8x3A"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
