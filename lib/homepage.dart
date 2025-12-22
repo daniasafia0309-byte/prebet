@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
 import 'booking.dart';
 import 'common/widgets/main_bottom_nav.dart';
-
-// IMPORT PAGE NAVIGATION
-import 'my_rides.dart';
-import 'chat.dart';
-import 'profile.dart';
+import 'common/widgets/app_bar.dart';
+import 'common/app_colors.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -13,53 +10,25 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF5F5F5),
+      backgroundColor: AppColors.page,
 
       // ================= APP BAR =================
-      appBar: AppBar(
-        elevation: 0,
-        backgroundColor: Colors.white,
-        titleSpacing: 0,
-        title: ListTile(
-          leading: const Icon(
-            Icons.location_on,
-            color: Color(0xFF0D7C7B),
-          ),
-          title: const Text(
-            "Location",
-            style: TextStyle(fontSize: 12),
-          ),
-          subtitle: const Text(
-            "UPSI - Kampus Sultan Azlan Shah",
-            style: TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.w600,
-            ),
-          ),
-        ),
-        actions: [
-          Padding(
-            padding: const EdgeInsets.only(right: 12),
-            child: CircleAvatar(
-              backgroundColor: const Color(0xFF0D7C7B),
-              child: const Text(
-                "D",
-                style: TextStyle(color: Colors.white),
-              ),
-            ),
-          ),
-        ],
+      appBar: const PrebetAppBar(
+        title: '',
+        showLocation: true,
+        location: 'UPSI - Kampus Sultan Azlan Shah',
+        avatarText: 'D',
       ),
 
       // ================= BODY =================
       body: SingleChildScrollView(
         child: Column(
           children: [
-            // ================= MAP =================
+            // MAP PLACEHOLDER
             Container(
               height: 260,
               width: double.infinity,
-              color: Colors.green.shade100,
+              color: AppColors.primaryLight,
               child: const Center(
                 child: Text(
                   "MAP VIEW",
@@ -68,22 +37,22 @@ class HomePage extends StatelessWidget {
               ),
             ),
 
-            // ================= PICKUP & DESTINATION =================
+            // PICKUP & DESTINATION
             Container(
               margin: const EdgeInsets.all(16),
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: AppColors.card,
                 borderRadius: BorderRadius.circular(14),
                 border: Border.all(
-                  color: Colors.blue,
+                  color: AppColors.iconPrimary, // ✅ FIX
                   width: 1.5,
                 ),
               ),
               child: Column(
-                children: [
+                children: const [
                   Row(
-                    children: const [
+                    children: [
                       Icon(Icons.circle, size: 10, color: Colors.green),
                       SizedBox(width: 8),
                       Expanded(
@@ -95,11 +64,11 @@ class HomePage extends StatelessWidget {
                       Icon(Icons.my_location, color: Colors.blue),
                     ],
                   ),
-                  const SizedBox(height: 12),
-                  const Divider(),
-                  const SizedBox(height: 12),
+                  SizedBox(height: 12),
+                  Divider(),
+                  SizedBox(height: 12),
                   Row(
-                    children: const [
+                    children: [
                       Icon(Icons.circle, size: 10, color: Colors.red),
                       SizedBox(width: 8),
                       Expanded(
@@ -115,7 +84,7 @@ class HomePage extends StatelessWidget {
               ),
             ),
 
-            // ================= QUICK ACTION =================
+            // QUICK ACTION
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Column(
@@ -126,6 +95,7 @@ class HomePage extends StatelessWidget {
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 14,
+                      color: AppColors.textPrimary,
                     ),
                   ),
                   const SizedBox(height: 12),
@@ -141,10 +111,9 @@ class HomePage extends StatelessWidget {
                       );
                     },
                     child: Container(
-                      width: double.infinity,
                       height: 56,
                       decoration: BoxDecoration(
-                        color: const Color(0xFF0D7C7B),
+                        color: AppColors.buttonPrimary,
                         borderRadius: BorderRadius.circular(14),
                       ),
                       child: Row(
@@ -174,26 +143,8 @@ class HomePage extends StatelessWidget {
       ),
 
       // ================= BOTTOM NAV =================
-      bottomNavigationBar: MainBottomNav(
-        currentIndex: 0, // Home
-        onTap: (index) {
-          if (index == 1) {
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(builder: (_) => MyRidesPage()),
-            );
-          } else if (index == 2) {
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(builder: (_) => ChatPage()),
-            );
-          } else if (index == 3) {
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(builder: (_) => ProfilePage()),
-            );
-          }
-        },
+      bottomNavigationBar: const MainBottomNav(
+        currentIndex: 0,
       ),
     );
   }

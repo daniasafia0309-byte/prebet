@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 import 'common/widgets/main_bottom_nav.dart';
-
-// IMPORT PAGE NAVIGATION
-import 'homepage.dart';
-import 'chat.dart';
-import 'profile.dart';
+import 'common/widgets/app_bar.dart';
+import 'common/app_colors.dart';
 
 class MyRidesPage extends StatefulWidget {
   const MyRidesPage({super.key});
@@ -19,20 +16,11 @@ class _MyRidesPageState extends State<MyRidesPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.page,
 
-      // ================= APP BAR =================
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 0,
-        centerTitle: true,
-        title: const Text(
-          'My Rides',
-          style: TextStyle(
-            color: Colors.black,
-            fontWeight: FontWeight.w600,
-          ),
-        ),
+      // ================= APP BAR (REUSABLE) =================
+      appBar: const PrebetAppBar(
+        title: 'My Rides',
       ),
 
       // ================= BODY =================
@@ -62,6 +50,7 @@ class _MyRidesPageState extends State<MyRidesPage> {
                   style: TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.bold,
+                    color: AppColors.textPrimary,
                   ),
                 ),
               ],
@@ -104,29 +93,9 @@ class _MyRidesPageState extends State<MyRidesPage> {
         ),
       ),
 
-      // ================= BOTTOM NAV (REUSABLE) =================
-      bottomNavigationBar: MainBottomNav(
+      // ================= BOTTOM NAV =================
+      bottomNavigationBar: const MainBottomNav(
         currentIndex: 1, // My Rides
-        onTap: (index) {
-          if (index == 0) {
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(builder: (_) => HomePage()),
-            );
-          } else if (index == 1) {
-            // current page
-          } else if (index == 2) {
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(builder: (_) => ChatPage()),
-            );
-          } else if (index == 3) {
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(builder: (_) => ProfilePage()),
-            );
-          }
-        },
       ),
     );
   }
@@ -147,14 +116,16 @@ class _MyRidesPageState extends State<MyRidesPage> {
           padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 8),
           decoration: BoxDecoration(
             color: isActive
-                ? const Color(0xFF0D7C7B)
+                ? AppColors.primary
                 : Colors.grey.shade200,
             borderRadius: BorderRadius.circular(20),
           ),
           child: Text(
             title,
             style: TextStyle(
-              color: isActive ? Colors.white : Colors.black54,
+              color: isActive
+                  ? Colors.white
+                  : AppColors.textSecondary,
               fontWeight: FontWeight.w600,
             ),
           ),
@@ -189,51 +160,50 @@ class RideCard extends StatelessWidget {
       margin: const EdgeInsets.only(bottom: 14),
       padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
-        color: Colors.grey.shade100,
+        color: AppColors.card,
         borderRadius: BorderRadius.circular(14),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // ================= STATUS & PRICE =================
+          // STATUS & PRICE
           Row(
             children: [
-              const Icon(Icons.circle, size: 8, color: Colors.green),
+              const Icon(Icons.circle, size: 8, color: AppColors.success),
               const SizedBox(width: 6),
               const Text(
                 'Completed',
                 style: TextStyle(
-                  color: Colors.green,
+                  color: AppColors.success,
                   fontWeight: FontWeight.bold,
                 ),
               ),
               const Spacer(),
               Text(
                 price,
-                style: const TextStyle(
-                  fontWeight: FontWeight.bold,
-                ),
+                style: const TextStyle(fontWeight: FontWeight.bold),
               ),
             ],
           ),
 
           const SizedBox(height: 8),
 
-          // ================= DRIVER NAME =================
+          // NAME
           Text(
             name,
             style: const TextStyle(
               fontSize: 15,
               fontWeight: FontWeight.bold,
+              color: AppColors.textPrimary,
             ),
           ),
 
           const SizedBox(height: 10),
 
-          // ================= PICKUP =================
+          // PICKUP
           Row(
             children: [
-              const Icon(Icons.circle, size: 8, color: Colors.green),
+              const Icon(Icons.circle, size: 8, color: AppColors.success),
               const SizedBox(width: 8),
               Expanded(
                 child: Text(
@@ -246,10 +216,10 @@ class RideCard extends StatelessWidget {
 
           const SizedBox(height: 6),
 
-          // ================= DESTINATION =================
+          // DESTINATION
           Row(
             children: [
-              const Icon(Icons.circle, size: 8, color: Colors.red),
+              const Icon(Icons.circle, size: 8, color: AppColors.error),
               const SizedBox(width: 8),
               Expanded(
                 child: Text(
@@ -262,14 +232,14 @@ class RideCard extends StatelessWidget {
 
           const SizedBox(height: 10),
 
-          // ================= TIME & RATING =================
+          // TIME & RATING
           Row(
             children: [
               Text(
                 time,
                 style: const TextStyle(
                   fontSize: 12,
-                  color: Colors.grey,
+                  color: AppColors.textHint,
                 ),
               ),
               const Spacer(),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'driver_detail.dart';
+import 'Common/widgets/main_bottom_nav.dart';
 
 class BookingPage extends StatelessWidget {
   const BookingPage({super.key});
@@ -78,15 +79,13 @@ class BookingPage extends StatelessWidget {
                     avatarColor: Colors.brown,
                     verified: true,
                   ),
-
-                  // ⭐ DRIVER DENGAN AVATAR #00C3D0
                   DriverCard(
                     name: "Ammar Ali",
                     rating: 4.8,
                     car: "Perodua Myvi · ABA4020",
                     carColor: "Yellow",
                     price: "RM 6.50",
-                    avatarColor: Color(0xFF00C3D0), // ✅ DIMINTA
+                    avatarColor: Color(0xFF00C3D0),
                     verified: true,
                   ),
                 ],
@@ -97,28 +96,9 @@ class BookingPage extends StatelessWidget {
       ),
 
       // ================= BOTTOM NAV =================
-      bottomNavigationBar: BottomNavigationBar(
-        selectedItemColor: const Color(0xFF0D7C7B),
-        unselectedItemColor: Colors.grey,
-        type: BottomNavigationBarType.fixed,
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: "Home",
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.directions_car),
-            label: "My Rides",
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.chat_bubble_outline),
-            label: "Chat",
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person_outline),
-            label: "Profile",
-          ),
-        ],
+      // Booking bukan tab utama → kekalkan Home aktif
+      bottomNavigationBar: const MainBottomNav(
+        currentIndex: 0,
       ),
     );
   }
@@ -240,7 +220,7 @@ class DriverCard extends StatelessWidget {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => const DriverDetailPage(),
+                      builder: (_) => const DriverDetailPage(),
                     ),
                   );
                 },
