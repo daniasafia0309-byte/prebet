@@ -20,7 +20,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: AppTheme.lightTheme,
-      home: const LoginPage(), // ✅ LOGIN SENTIASA MUNCUL
+      home: const LoginPage(), 
     );
   }
 }

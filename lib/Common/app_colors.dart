@@ -1,12 +1,10 @@
-import 'package:flutter/material.dart';
 
 class AppColors {
-  // ================= BRAND / PRIMARY =================
   static const Color primary = Color(0xFF0D7C7B);       // Main brand & buttons
   static const Color primaryDark = Color(0xFF075E5C);   // Gradient bottom
   static const Color primaryLight = Color(0xFF2CB7A6);  // Gradient top
 
-  // ================= BACKGROUND =================
+  // ======
   static const Color page = Color(0xFFF5F5F5);          // App background
   static const Color card = Colors.white;               // Card background
 
