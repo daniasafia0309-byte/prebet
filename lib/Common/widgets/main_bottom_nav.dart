@@ -1,68 +1,66 @@
 import 'package:flutter/material.dart';
-import '../app_colors.dart';
-import '../../homepage.dart';
-import '../../my_rides.dart';
-import '../../chat.dart';
-import '../../profile.dart';
+import 'package:prebet/common/app_colors.dart';
 
 class MainBottomNav extends StatelessWidget {
   final int currentIndex;
+  final Function(int) onTap;
 
   const MainBottomNav({
     super.key,
     required this.currentIndex,
+    required this.onTap,
   });
-
-  void _onItemTapped(BuildContext context, int index) {
-    if (index == currentIndex) return;
-
-    Widget page;
-
-    switch (index) {
-      case 0:
-        page = HomePage();
-        break;
-      case 1:
-        page = MyRidesPage();
-        break;
-      case 2:
-        page = ChatPage();
-        break;
-      case 3:
-        page = ProfilePage();
-        break;
-      default:
-        return;
-    }
-
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(builder: (_) => page),
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
     return BottomNavigationBar(
       currentIndex: currentIndex,
-      onTap: (index) => _onItemTapped(context, index),
+      onTap: onTap,
       type: BottomNavigationBarType.fixed,
-      selectedItemColor: AppColors.primary,
-      unselectedItemColor: Colors.grey,
-      items: const [
-        BottomNavigationBarItem(
-          icon: Icon(Icons.home),
+
+      selectedItemColor: AppColors.navbarActive,
+      unselectedItemColor: AppColors.navbarInactive,
+
+      iconSize: 24,
+      selectedLabelStyle: const TextStyle(
+        fontSize: 12,
+        height: 1.6, 
+      ),
+      unselectedLabelStyle: const TextStyle(
+        fontSize: 12,
+        height: 1.6, 
+      ),
+
+      items: [
+        const BottomNavigationBarItem(
+          icon: Icon(Icons.home_outlined),
           label: 'Home',
         ),
+
         BottomNavigationBarItem(
-          icon: Icon(Icons.directions_car),
+          icon: SizedBox(
+            width: 28,
+            height: 28,
+            child: ImageIcon(
+              AssetImage('assets/icon/car.png'),
+            ),
+          ),
+          activeIcon: SizedBox(
+            width: 28,
+            height: 28,
+            child: ImageIcon(
+              AssetImage('assets/icon/car.png'),
+            ),
+          ),
           label: 'My Rides',
         ),
-        BottomNavigationBarItem(
+
+        const BottomNavigationBarItem(
           icon: Icon(Icons.chat_bubble_outline),
           label: 'Chat',
         ),
-        BottomNavigationBarItem(
+
+        const BottomNavigationBarItem(
           icon: Icon(Icons.person_outline),
           label: 'Profile',
         ),

@@ -1,129 +1,141 @@
 import 'package:flutter/material.dart';
-import '../app_colors.dart';
+import 'package:flutter/services.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:prebet/common/app_colors.dart';
 
 class PrebetAppBar extends StatelessWidget
     implements PreferredSizeWidget {
-
   final String title;
-  final bool showLocation;
-  final bool showSearch;
-  final String? location;
-  final String? avatarText;
-  final VoidCallback? onAvatarTap;
+  final bool showLocation; // greeting switch
+  final Widget? trailing;
 
   const PrebetAppBar({
     super.key,
     required this.title,
     this.showLocation = false,
-    this.showSearch = false,
-    this.location,
-    this.avatarText,
-    this.onAvatarTap,
+    this.trailing,
   });
 
   @override
-  Size get preferredSize =>
-      Size.fromHeight(showSearch ? 120 : 60);
+  Size get preferredSize => const Size.fromHeight(92);
 
   @override
   Widget build(BuildContext context) {
-    return AppBar(
-      backgroundColor: AppColors.card,
-      elevation: 0,
-      automaticallyImplyLeading: false,
-      centerTitle: !showLocation,
-
-      title: showLocation
-          ? _locationHeader()
-          : Text(
-              title,
-              style: const TextStyle(
-                color: AppColors.textPrimary,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-
-      actions: [
-        if (avatarText != null)
-          Padding(
-            padding: const EdgeInsets.only(right: 12),
-            child: GestureDetector(
-              onTap: onAvatarTap,
-              child: CircleAvatar(
-                radius: 18,
-                backgroundColor: AppColors.primary,
-                child: Text(
-                  avatarText!,
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-            ),
-          ),
-      ],
-
-      bottom: showSearch ? _searchBar() : null,
-    );
-  }
-
-  Widget _locationHeader() {
-    return Row(
-      children: [
-        const Icon(
-          Icons.location_on,
-          color: AppColors.primary,
-          size: 20,
-        ),
-        const SizedBox(width: 6),
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+    return AnnotatedRegion<SystemUiOverlayStyle>(
+      value: const SystemUiOverlayStyle(
+        statusBarIconBrightness: Brightness.light,
+        statusBarBrightness: Brightness.dark,
+      ),
+      child: AppBar(
+        elevation: 0,
+        toolbarHeight: 76,
+        automaticallyImplyLeading: false,
+        backgroundColor: Colors.transparent,
+        flexibleSpace: _gradient(),
+        titleSpacing: 16,
+        title: Padding(
+          padding: const EdgeInsets.only(top: 8),
+          child: Row(
             children: [
-              const Text(
-                'Location',
-                style: TextStyle(
-                  fontSize: 12,
-                  color: AppColors.textSecondary,
-                ),
+              Expanded(
+                child: showLocation
+                    ? _greeting()
+                    : _centerTitle(),
               ),
-              Text(
-                location ?? '',
-                style: const TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w600,
-                  color: AppColors.textPrimary,
-                ),
-                overflow: TextOverflow.ellipsis,
-              ),
+              if (trailing != null) trailing!,
             ],
-          ),
-        ),
-      ],
-    );
-  }
-
-  PreferredSizeWidget _searchBar() {
-    return PreferredSize(
-      preferredSize: const Size.fromHeight(56),
-      child: Padding(
-        padding: const EdgeInsets.fromLTRB(16, 0, 16, 12),
-        child: Container(
-          height: 44,
-          decoration: BoxDecoration(
-            color: AppColors.page,
-            borderRadius: BorderRadius.circular(12),
-          ),
-          child: const TextField(
-            decoration: InputDecoration(
-              hintText: 'Search messages...',
-              prefixIcon: Icon(Icons.search),
-              border: InputBorder.none,
-            ),
           ),
         ),
       ),
     );
   }
+
+  Widget _gradient() => Container(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            colors: [
+              AppColors.primaryColor,
+              Color(0xFF12A56B),
+            ],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+        ),
+      );
+
+  Widget _greeting() {
+    final hour = DateTime.now().hour;
+    late String greeting;
+
+    if (hour < 12) {
+      greeting = 'Good Morning ☀️';
+    } else if (hour == 12) {
+      greeting = 'Good Afternoon 🌤️';
+    } else if (hour <= 18) {
+      greeting = 'Good Evening 🌤️';
+    } else {
+      greeting = 'Good Night 🌙';
+    }
+
+    final user = FirebaseAuth.instance.currentUser;
+
+    if (user == null) {
+      return _greetingText(greeting, 'User');
+    }
+
+    return StreamBuilder<DocumentSnapshot>(
+      stream: FirebaseFirestore.instance
+          .collection('users')
+          .doc(user.uid)
+          .snapshots(),
+      builder: (context, snapshot) {
+        String name = user.displayName ?? 'User';
+
+        if (snapshot.hasData && snapshot.data!.exists) {
+          final data =
+              snapshot.data!.data() as Map<String, dynamic>;
+          name = data['name'] ?? name;
+        }
+
+        return _greetingText(greeting, name);
+      },
+    );
+  }
+
+  Widget _greetingText(String greeting, String name) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          greeting,
+          style: const TextStyle(
+            color: Colors.white70,
+            fontSize: 16,
+          ),
+        ),
+        const SizedBox(height: 6),
+        Text(
+          '$name!',
+          style: const TextStyle(
+            color: Colors.white,
+            fontSize: 22,
+            fontWeight: FontWeight.bold,
+          ),
+          overflow: TextOverflow.ellipsis,
+        ),
+      ],
+    );
+  }
+
+  Widget _centerTitle() => Center(
+        child: Text(
+          title,
+          style: const TextStyle(
+            color: Colors.white,
+            fontSize: 18,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+      );
 }

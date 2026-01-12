@@ -3,7 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class Rating {
   final String bookingId;
   final String userId;
-  final int rating; // 1 - 5
+  final int rating; 
   final String? comment;
   final Timestamp createdAt;
 

@@ -1,49 +1,63 @@
-import 'package:prebet/lib/data/driver_model.dart';
-import 'package:prebet/lib/repositories/driver_repositories.dart';
+import 'package:flutter/material.dart';
+import 'package:prebet/data/driver_model.dart';
+import 'package:prebet/repositories/driver_repositories.dart';
 
-
-class DriverController {
+class DriverController extends ChangeNotifier {
   final DriverRepository _repository = DriverRepository();
 
-  // =============================== STATE ===============================
   bool isLoading = false;
   List<DriverModel> drivers = [];
   DriverModel? selectedDriver;
 
-  // =============================== LOAD AVAILABLE DRIVERS ===============================
-  Future<void> fetchAvailableDrivers() async {
+  // =========================
+  // FETCH AVAILABLE DRIVERS
+  // =========================
+  Future<void> fetchAvailableDrivers({
+    required double basePrice, // 🔥 LOCATION-BASED PRICE
+    required int passenger,
+  }) async {
     isLoading = true;
+    notifyListeners();
 
-    drivers = await _repository.getAvailableDrivers();
+    try {
+      final allDrivers = await _repository.getAvailableDrivers();
+
+      // Ambil max 5 driver
+      allDrivers.shuffle();
+      drivers = allDrivers.take(5).toList();
+
+      for (var driver in drivers) {
+        final extraPassengerCharge =
+            passenger > 1 ? (passenger - 1) * 1.0 : 0.0;
+
+        final finalPrice =
+            basePrice + extraPassengerCharge;
+
+        driver.price = finalPrice;
+      }
+    } catch (e) {
+      debugPrint('❌ ERROR fetchAvailableDrivers: $e');
+      drivers = [];
+    }
 
     isLoading = false;
+    notifyListeners();
   }
 
-  // =============================== LOAD DRIVER BY ID ===============================
+  // =========================
+  // FETCH DRIVER BY ID
+  // =========================
   Future<void> fetchDriverById(String driverId) async {
     isLoading = true;
+    notifyListeners();
 
-    selectedDriver = await _repository.getDriverById(driverId);
+    try {
+      selectedDriver = await _repository.getDriverById(driverId);
+    } catch (e) {
+      debugPrint('❌ ERROR fetchDriverById: $e');
+    }
 
     isLoading = false;
-  }
-
-  // =============================== SAVE / UPDATE DRIVER ===============================
-  Future<void> saveDriver(DriverModel driver) async {
-    await _repository.saveDriver(driver);
-  }
-
-  // =============================== UPDATE DRIVER AVAILABILITY ===============================
-  Future<void> setDriverAvailability(
-    String driverId,
-    bool isAvailable,
-  ) async {
-    await _repository.updateAvailability(driverId, isAvailable);
-  }
-
-  // =============================== DELETE DRIVER ===============================
-  Future<void> deleteDriver(String driverId) async {
-    await _repository.deleteDriver(driverId);
-    drivers.removeWhere((d) => d.id == driverId);
+    notifyListeners();
   }
 }

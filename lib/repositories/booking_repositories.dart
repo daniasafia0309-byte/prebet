@@ -1,58 +1,48 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:prebet/lib/data/booking_model.dart';
 
-class BookingRepository {
+class OrderRepository {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-  // CREATE BOOKING 
-  Future<void> createBooking(Booking booking) async {
-    await _firestore
-        .collection('bookings')
-        .doc(booking.id)
-        .set(booking.toMap());
-  }
+  static const String _collection = 'bookings';
+  Future<String> createOrder(Map<String, dynamic> data) async {
+    final docRef = await _firestore
+        .collection(_collection)
+        .add(data);
 
-  // GET BOOKINGS BY USER 
-  Future<List<Booking>> getBookingsByUser(String userId) async {
-    final query = await _firestore
-        .collection('bookings')
+    return docRef.id;
+  }
+  Stream<DocumentSnapshot<Map<String, dynamic>>> streamOrder(
+    String orderId,
+  ) {
+    return _firestore
+        .collection(_collection)
+        .doc(orderId)
+        .snapshots();
+  }
+  Stream<QuerySnapshot<Map<String, dynamic>>> streamOrdersByUser(
+    String userId,
+  ) {
+    return _firestore
+        .collection(_collection)
         .where('userId', isEqualTo: userId)
         .orderBy('createdAt', descending: true)
-        .get();
-
-    return query.docs.map((doc) {
-      return Booking.fromMap(doc.id, doc.data());
-    }).toList();
+        .snapshots();
   }
-
-  // GET BOOKING BY ID 
-  Future<Booking?> getBookingById(String bookingId) async {
-    final doc = await _firestore
-        .collection('bookings')
-        .doc(bookingId)
-        .get();
-
-    if (!doc.exists) return null;
-
-    return Booking.fromMap(doc.id, doc.data()!);
-  }
-
-  // UPDATE BOOKING STATUS 
-  Future<void> updateBookingStatus(
-    String bookingId,
-    String status,
+  
+  Future<void> updateOrder(
+    String orderId,
+    Map<String, dynamic> data,
   ) async {
     await _firestore
-        .collection('bookings')
-        .doc(bookingId)
-        .update({'status': status});
+        .collection(_collection)
+        .doc(orderId)
+        .update(data);
   }
 
-  // DELETE BOOKING 
-  Future<void> deleteBooking(String bookingId) async {
+  Future<void> deleteOrder(String orderId) async {
     await _firestore
-        .collection('bookings')
-        .doc(bookingId)
+        .collection(_collection)
+        .doc(orderId)
         .delete();
   }
 }

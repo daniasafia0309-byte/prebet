@@ -1,34 +1,31 @@
+import 'package:flutter/material.dart';
 
 class AppColors {
-  static const Color primary = Color(0xFF0D7C7B);       // Main brand & buttons
-  static const Color primaryDark = Color(0xFF075E5C);   // Gradient bottom
-  static const Color primaryLight = Color(0xFF2CB7A6);  // Gradient top
+  static const Color primaryColor = Color.fromARGB(255, 13, 124, 123);
+  static const Color primaryDark = Color.fromARGB(255, 7, 94, 92);
+  static const Color secondaryColor = Color.fromARGB(255, 44, 183, 166);
+  static const Color secondaryLight = Color.fromARGB(255, 209, 250, 229);
 
-  // ======
-  static const Color page = Color(0xFFF5F5F5);          // App background
-  static const Color card = Colors.white;               // Card background
+  static const Color pageColor = Color.fromARGB(255, 245, 247, 248);
+  static const Color backgroundColor = pageColor;
+  static const Color cardColor = Colors.white;
 
-  // ================= TEXT =================
-  static const Color textPrimary = Color(0xFF1F2937);   // Main text
-  static const Color textSecondary = Color(0xFF6B7280); // Subtitle
-  static const Color textHint = Color(0xFF9CA3AF);      // Hint / placeholder
+  // Teks
+  static const Color textPrimary = Color.fromARGB(255, 31, 41, 55);
+  static const Color textSecondary = Color.fromARGB(255, 107, 114, 128);
   static const Color textWhite = Colors.white;
 
-  // ================= ICON =================
-  static const Color iconPrimary = Color(0xFF0D7C7B);   // Active icon
-  static const Color iconInactive = Color(0xFF9CA3AF);  // Inactive icon
-
-  // ================= INPUT =================
-  static const Color inputBorder = Color(0xFFE5E7EB);
-  static const Color inputFill = Colors.white;
-
-  // ================= BUTTON =================
-  static const Color buttonPrimary = Color(0xFF0D7C7B);
-  static const Color buttonDisabled = Color(0xFF9CA3AF);
+  // Buttons
+  static const Color buttonPrimary = primaryColor;
   static const Color buttonText = Colors.white;
 
-  // ================= STATUS =================
-  static const Color success = Color(0xFF22C55E);
-  static const Color warning = Color(0xFFF59E0B);
-  static const Color error = Color(0xFFEF4444);
+  // nav bar
+  static const Color navbarBackground = Colors.white;
+  static const Color navbarActive = primaryColor;
+  static const Color navbarInactive = Color.fromARGB(255, 156, 163, 175);
+
+  // status
+  static const Color success = Color.fromARGB(255, 34, 197, 94);
+  static const Color warning = Color.fromARGB(255, 245, 158, 11);
+  static const Color error = Color.fromARGB(255, 239, 68, 68);
 }
